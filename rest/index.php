@@ -19,7 +19,7 @@
   require_once('./lib/url.php');
   require_once('./classes/DB.php');
   require_once('./classes/Logger.php');
-  require_once('./classes/User.php');
+  //require_once('./classes/User.php');
 
   $sRequestedURL = $_SERVER['REQUEST_URI'];
   $sURL = str_replace($PATH_NAME, '', $sRequestedURL);
@@ -30,14 +30,14 @@
   if(!$CONF->DBIsSet() || !$DB->connection_established()){
     die("DB is not set. No Connection");
   }
-
   $URL = get_url($sURL);
-  if($URL == '/rest'){
-     // REST-requests
-    header('Content-Type: application/json');
-    $second_url = get_second_url($sURL, $REST);
-    $restCall = &get_page($second_url, $REST);
-    if(isset($restCall['script']))
-        $restCall['script']($DB);
-  }
+  // REST-requests
+  header('Content-Type: application/json');
+
+  $second_url = get_second_url($sURL);
+  $restCall = &get_page($second_url, $REST);
+  $method = $_SERVER['REQUEST_METHOD'];
+
+  if(isset($restCall['script']))
+      $restCall['script']($DB, $method);
 ?>

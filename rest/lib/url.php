@@ -7,7 +7,6 @@
    * @return &Page
    */
   function &get_page(&$sURL, &$aRoutes){
-    $sURL = get_url($sURL);
     if(isset($aRoutes[$sURL]))
       return($aRoutes[$sURL]);
     return $aRoutes['/404'];
@@ -22,7 +21,7 @@
    */
   function get_url(&$sURL){
     $aURL = explode('/', $sURL);
-    return('/' . $aURL[1]);
+    return('/' . $aURL[0]);
   }
 
   /**
@@ -34,23 +33,7 @@
    */
   function get_second_url(&$sURL){
     $aURL = explode('/', $sURL);
-    return('/' . $aURL[2]);
-  }
-
-   /**
-   * Search url for allowed filetypes
-   * @param sURL                  URL-String
-   * @param sALLOWED_FILETYPES    Array of allowed filetypes
-   * @author David Krawiec
-   * @return boolean true/false
-   */
-  function isAllowedFileType(&$sURL, &$ALLOWED_FILETYPES){
-    $fileInfo = pathinfo($sURL);
-
-    if(isset($fileInfo['extension']) &&
-       isset($ALLOWED_FILETYPES[$fileInfo['extension']]) )
-      return true;
-    return false;
+    return('/' . $aURL[1]);
   }
 
    /**
