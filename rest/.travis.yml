@@ -1,0 +1,11 @@
+sudo: required
+language: php
+before_install:
+    sudo apt-get install php mongodb apache2
+after_success:
+    ssh
+    cd /var/www/html/
+    rm -rf ./BountyTask ./rest
+    git clone https://github.com/remicktr/BountyTask
+    mv ./BountyTask/rest ./
+    rm -rf ./BountyTask
