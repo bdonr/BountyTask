@@ -26,7 +26,6 @@
     }
 
     public function initCollections(){
-        return null;
         // first we create the collections; database is created
         // implicit
         $cmd = new MongoDB\Driver\Command(
@@ -50,16 +49,100 @@
             ]
         );
         $this->DB->executeCommand($this->DB_NAME, $cmd);
-
-        $cmd = new MongoDB\Driver\Command(["create" => "group"]);
+        $cmd = new MongoDB\Driver\Command(
+            [
+                "create" => "group",
+                "validator" => [
+                    '$or' => array(
+                        [
+                            "date"=> ['$exists' => true, '$type' => "date"],
+                            "name"=> ['$exists'=> true, '$type' => 'string'],
+                            "score"=> ['$exists' => true, '$type' => 'int'],
+                            "description"=> ['$exists' => true, '$type' => 'string'],
+                            "public_info"=> ['$exists' => true, '$type' => 'string'],
+                            "images_ids"=> ['$exists' => true, '$type' => 'array'],
+                            "users_ids"=> ['$exists' => true, '$type' => 'array'],
+                            "messages_ids"=> ['$exists' => true, '$type' => 'array']
+                        ]
+                    )
+                ],
+                'validationAction' => 'warn'
+            ]
+        );
         $this->DB->executeCommand($this->DB_NAME, $cmd);
-        $cmd = new MongoDB\Driver\Command(["create" => "image"]);
+        $cmd = new MongoDB\Driver\Command(
+            [
+                "create" => "image",
+                "validator" => [
+                    '$or' => array(
+                        [
+                            "date"=> ['$exists' => true, '$type' => "date"],
+                            "url"=> ['$exists'=> true, '$type' => 'string'],
+                            "description"=> ['$exists' => true, '$type' => 'string'],
+                        ]
+                    )
+                ],
+                'validationAction' => 'warn'
+            ]
+        );
         $this->DB->executeCommand($this->DB_NAME, $cmd);
-        $cmd = new MongoDB\Driver\Command(["create" => "message"]);
+        // TODO: it would be a good idea to put message: from and to as index
+        $cmd = new MongoDB\Driver\Command(
+            [
+                "create" => "message",
+                "validator" => [
+                    '$or' => array(
+                        [
+                            "date"=> ['$exists' => true, '$type' => "date"],
+                            "from"=> ['$exists'=> true, '$type' => 'string'],
+                            "to"=> ['$exists' => true, '$type' => 'string'],
+                            "content"=> ['$exists' => true, '$type' => 'string'],
+                        ]
+                    )
+                ],
+                'validationAction' => 'warn'
+            ]
+        );
         $this->DB->executeCommand($this->DB_NAME, $cmd);
-        $cmd = new MongoDB\Driver\Command(["create" => "task"]);
+        $cmd = new MongoDB\Driver\Command(
+            [
+                "create" => "task",
+                "validator" => [
+                    '$or' => array(
+                        [
+                            "date"=> ['$exists' => true, '$type' => "date"],
+                            "creator_id"=> ['$exists'=> true, '$type' => 'string'],
+                            "description"=> ['$exists' => true, '$type' => 'string'],
+                            "messages_ids"=> ['$exists' => true, '$type' => 'array'],
+                            "users_ids"=> ['$exists' => true, '$type' => 'array'],
+                            "images_ids"=> ['$exists' => true, '$type' => 'array'],
+                            "geo"=> ['$exists' => true, '$type' => 'array'],
+                            "bountys_ids"=> ['$exists' => true, '$type' => 'array'],
+                            "validators_ids"=> ['$exists' => true, '$type' => 'array'],
+                        ]
+                    )
+                ],
+                'validationAction' => 'warn'
+            ]
+        );
         $this->DB->executeCommand($this->DB_NAME, $cmd);
-        $cmd = new MongoDB\Driver\Command(["create" => "bounty"]);
+        $cmd = new MongoDB\Driver\Command(
+            [
+                "create" => "bounty",
+                "validator" => [
+                    '$or' => array(
+                        [
+                            "date"=> ['$exists' => true, '$type' => "date"],
+                            "payers_id"=> ['$exists'=> true, '$type' => 'string'],
+                            "type"=> ['$exists' => true, '$type' => 'string'],
+                            "amount"=> ['$exists' => true, '$type' => 'float'],
+                            "payment_api_details"=> ['$exists' => true, '$type' => 'array'],
+                        ]
+                    )
+                ],
+                'validationAction' => 'warn'
+            ]
+        );
         $this->DB->executeCommand($this->DB_NAME, $cmd);
     }
 
